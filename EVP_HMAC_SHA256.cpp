@@ -3,7 +3,7 @@
 #include <openssl/err.h>
 
 
-int EVP_HMAC_SHA256(const char *key, const char *msg, unsigned char *retmsg) {
+int EVP_HMAC_SHA256(const char *key, const char *msg, char *retmsg) {
     EVP_MAC *mac = EVP_MAC_fetch(NULL, "HMAC", NULL);
     const char *digest = "SHA256";
     EVP_MAC_CTX *ctx = NULL;
@@ -27,7 +27,7 @@ int EVP_HMAC_SHA256(const char *key, const char *msg, unsigned char *retmsg) {
     if (!EVP_MAC_update(ctx, buf, read_l)) goto err;
     if (!EVP_MAC_final(ctx, buf, &final_l, sizeof(buf))) goto err;
     for (i = 0; i < final_l; i++)
-        sprintf((char*)retmsg + i*2, "%02x", buf[i]);
+        sprintf(retmsg + i*2, "%02x", buf[i]);
     EVP_MAC_CTX_free(ctx);
     EVP_MAC_free(mac);
     return 0;
